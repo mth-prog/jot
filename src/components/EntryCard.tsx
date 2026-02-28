@@ -64,7 +64,7 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
   }
 
   return (
-    <article className={`bg-[#18181b] border border-[#2a2a2e] rounded-xl mb-3 transition-shadow hover:shadow-lg hover:shadow-black/30 ${editing ? '' : 'overflow-hidden'}`}>
+    <article className="bg-[#18181b] border border-[#2a2a2e] rounded-xl mb-3 overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/30">
       {editing ? (
         <div data-color-mode="dark">
           {/* Edit header */}
@@ -102,7 +102,13 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
           </div>
 
           <div className="border-t border-[#2a2a2e]">
-            <MDEditor value={body} onChange={val => setBody(val ?? '')} height={300} preview="edit" style={{ borderRadius: 0 }} />
+            <textarea
+              value={body}
+              onChange={e => setBody(e.target.value)}
+              rows={12}
+              placeholder="Conteúdo (suporta Markdown)..."
+              className="w-full bg-[#111113] text-zinc-200 text-sm font-mono placeholder-zinc-600 px-4 py-3 outline-none resize-y leading-relaxed"
+            />
           </div>
 
           <div className="flex justify-end gap-2 px-4 py-3 border-t border-[#2a2a2e] bg-[#111113]">
