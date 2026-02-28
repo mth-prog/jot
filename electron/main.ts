@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { entryDb } from './db'
@@ -26,7 +26,7 @@ let win: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    icon: path.join(process.env.VITE_PUBLIC, process.platform === 'win32' ? 'logo.ico' : 'logo.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
@@ -64,6 +64,7 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(null)
   registerIpcHandlers()
   createWindow()
 })

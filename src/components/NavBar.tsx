@@ -1,4 +1,5 @@
 import React from 'react'
+import logo from '../assets/logo.png'
 
 type NavView = 'feed' | 'calendar' | 'tags' | 'settings'
 
@@ -47,13 +48,9 @@ export function NavBar({ active, onChange }: NavBarProps) {
       className="flex flex-col items-center py-5 h-screen shrink-0"
       style={{ width: 52, background: 'var(--c-surface)', borderRight: '1px solid var(--c-border)' }}
     >
-      {/* Logo monogram */}
-      <div
-        className="mb-6 select-none font-display"
-        style={{ color: 'var(--c-accent)', fontSize: 22, fontWeight: 700, fontStyle: 'italic', letterSpacing: '-0.02em' }}
-        title="Jot"
-      >
-        J
+      {/* Logo */}
+      <div className="mb-6 select-none" title="Jot">
+        <img src={logo} alt="Jot" style={{ width: 32, height: 32, objectFit: 'contain', borderRadius: 6 }} />
       </div>
 
       <div className="flex-1 flex flex-col gap-0.5 w-full px-1.5">

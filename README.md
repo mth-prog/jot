@@ -1,23 +1,29 @@
-# 📓 Work Journal
+<p align="center">
+  <img src="image.png" alt="Work Journal" width="96" />
+</p>
 
-App desktop para anotações e log de trabalho voltado a profissionais de tecnologia.
+# Work Journal
 
-## Stack
+Um app desktop para anotações e log de trabalho, feito para profissionais de tecnologia. Seus registros ficam 100% locais — sem nuvem, sem assinatura, sem rastreamento.
 
-- **Electron** — shell desktop
-- **React + TypeScript** — UI
-- **SQLite** (better-sqlite3) — banco de dados local, offline-first
-- **Markdown** (@uiw/react-md-editor) — editor com preview em tempo real
-- **Tailwind CSS v4** — estilização
+[![Electron](https://img.shields.io/badge/Electron-30-47848f?style=flat-square&logo=electron&logoColor=white)](https://www.electronjs.org/)
+[![React](https://img.shields.io/badge/React-18-61dafb?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-FTS5-003b57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+
+## Visão Geral
+
+Work Journal é um diário de trabalho offline-first para devs e pessoas de tech que precisam registrar o dia a dia — tarefas, bugs, deploys, reuniões, ideias. Tudo salvo localmente em um arquivo `.db`, sem dependência de internet.
 
 ## Funcionalidades
 
-- ✅ Criar, editar e excluir anotações
-- ✅ Editor Markdown com preview ao vivo (split-view)
-- ✅ Tags personalizadas (bug, feature, meeting, daily, deploy, etc.)
-- ✅ Busca full-text (SQLite FTS5) por título e conteúdo
-- ✅ Tema escuro focado em produtividade
-- ✅ Dados 100% locais (arquivo `.db` em `userData`)
+- **Offline-first** — Todos os dados ficam no seu computador. Sem nuvem, sem login.
+- **Markdown nativo** — Editor com preview em tempo real e suporte completo a Markdown.
+- **Tags personalizadas** — Categorize entradas com tags como `bug`, `feature`, `meeting`, `deploy`, etc.
+- **Busca full-text** — Pesquisa rápida por título e conteúdo via SQLite FTS5.
+- **Tema escuro** — Interface focada em produtividade, construída com Tailwind CSS v4.
+- **Calendário** — Navegue pelas anotações organizadas por data.
 
 ## Desenvolvimento
 
@@ -38,54 +44,41 @@ npm run dev
 npm run build
 ```
 
-O executável será gerado na pasta `dist/`.
+O instalador será gerado na pasta `release/`.
 
 ## Estrutura do Projeto
 
 ```
 src/
-├── components/
-│   ├── Sidebar.tsx     # Lista de entradas + busca
-│   └── Editor.tsx      # Editor Markdown com tags
+├── components/       # NavBar, Sidebar, Editor, etc.
 ├── hooks/
-│   └── useEntries.ts   # Hook de CRUD via IPC
+│   └── useEntries.ts # Hook de CRUD via IPC
 ├── types/
-│   └── index.ts        # Tipos compartilhados
-├── App.tsx             # Layout principal
-└── index.css           # Tailwind + estilos globais
+│   └── index.ts      # Tipos compartilhados
+├── App.tsx           # Layout principal
+└── index.css         # Tailwind + estilos globais
 
 electron/
-├── main.ts             # Processo principal + handlers IPC
-├── preload.ts          # Bridge contextBridge (window.journal)
-└── db.ts               # SQLite: schema + migrations + CRUD
+├── main.ts           # Processo principal + handlers IPC
+├── preload.ts        # Bridge contextBridge (window.journal)
+└── db.ts             # SQLite: schema + migrations + CRUD
 ```
 
+## Stack
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+| Tecnologia | Uso |
+|---|---|
+| [Electron](https://www.electronjs.org/) | Shell desktop multiplataforma |
+| [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) | Interface |
+| [SQLite](https://www.sqlite.org/) (better-sqlite3) | Banco de dados local, FTS5 |
+| [@uiw/react-md-editor](https://github.com/uiwjs/react-md-editor) | Editor Markdown |
+| [Tailwind CSS v4](https://tailwindcss.com/) | Estilização |
+| [Vite](https://vitejs.dev/) | Build e dev server |
 
-Currently, two official plugins are available:
+## Licença
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Work Journal é distribuído sob a [licença MIT](LICENSE).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+**Feito com ☕ para quem documenta o próprio trabalho.**

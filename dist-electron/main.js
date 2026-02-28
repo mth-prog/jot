@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, Menu, ipcMain } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { createRequire } from "node:module";
@@ -89,7 +89,7 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 let win;
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: path.join(process.env.VITE_PUBLIC, process.platform === "win32" ? "logo.ico" : "logo.png"),
     webPreferences: {
       preload: path.join(__dirname$1, "preload.mjs")
     }
@@ -115,6 +115,7 @@ app.on("activate", () => {
   }
 });
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(null);
   registerIpcHandlers();
   createWindow();
 });
