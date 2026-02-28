@@ -45,7 +45,7 @@ export function NavBar({ active, onChange }: NavBarProps) {
   return (
     <nav className="w-14 bg-[#111113] border-r border-[#2a2a2e] flex flex-col items-center py-4 gap-1 h-screen shrink-0">
       {/* Logo */}
-      <div className="mb-4 text-xs font-bold text-zinc-500 select-none tracking-widest" title="Work Journal">WJ</div>
+      <div className="mb-4 text-xs font-bold text-zinc-500 select-none tracking-widest" title="Jot">Jot</div>
 
       <div className="flex-1 flex flex-col gap-1 w-full px-1">
         {NAV_ITEMS.map(({ id, icon, label }) => (

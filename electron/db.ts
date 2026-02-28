@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url)
 // Load native module at runtime (not bundled by Vite)
 const Database = require('better-sqlite3') as typeof import('better-sqlite3')
 
-const dbPath = path.join(app.getPath('userData'), 'work-journal.db')
+const dbPath = path.join(app.getPath('userData'), 'jot.db')
 const db = new Database(dbPath)
 
 db.pragma('journal_mode = WAL')

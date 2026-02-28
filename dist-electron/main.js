@@ -4,7 +4,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 const require$1 = createRequire(import.meta.url);
 const Database = require$1("better-sqlite3");
-const dbPath = path.join(app.getPath("userData"), "work-journal.db");
+const dbPath = path.join(app.getPath("userData"), "jot.db");
 const db = new Database(dbPath);
 db.pragma("journal_mode = WAL");
 db.exec(`
