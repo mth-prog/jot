@@ -1,85 +1,123 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import './types'
 import type { Entry } from './types'
 import { useEntries } from './hooks/useEntries'
-import { Sidebar } from './components/Sidebar'
-import { Editor } from './components/Editor'
+import { NavBar } from './components/NavBar'
+import { ContextPanel } from './components/ContextPanel'
+import { Feed } from './components/Feed'
+import type { NavView } from './components/NavBar'
 
 function App() {
-  const { entries, loading, create, update, remove, search } = useEntries()
-  const [selected, setSelected] = useState<Entry | null>(null)
-  const [isNew, setIsNew] = useState(false)
+  const { entries, dates, loading, create, update, remove, search, getByDate, getByType } = useEntries()
+
+  const [activeNav, setActiveNav] = useState<NavView>('feed')
   const [searchQuery, setSearchQuery] = useState('')
+  const [activeFilter, setActiveFilter] = useState<string | null>(null)  // entry type
+  const [activeDate, setActiveDate] = useState<string | null>(null)
+  const [activeTag, setActiveTag] = useState<string | null>(null)
   const [displayedEntries, setDisplayedEntries] = useState<Entry[]>([])
 
+  // Recompute displayed entries whenever filters change
   useEffect(() => {
-    setDisplayedEntries(entries)
-  }, [entries])
+    async function compute() {
+      if (searchQuery.trim()) {
+        setDisplayedEntries(await search(searchQuery))
+      } else if (activeDate) {
+        setDisplayedEntries(await getByDate(activeDate))
+      } else if (activeFilter) {
+        setDisplayedEntries(await getByType(activeFilter))
+      } else if (activeTag) {
+        setDisplayedEntries(entries.filter(e => e.tags.includes(activeTag)))
+      } else {
+        setDisplayedEntries(entries)
+      }
+    }
+    compute()
+  }, [entries, searchQuery, activeDate, activeFilter, activeTag, search, getByDate, getByType])
 
-  const handleSearch = async (q: string) => {
+  const handleSearch = useCallback((q: string) => {
     setSearchQuery(q)
-    if (!q.trim()) {
-      setDisplayedEntries(entries)
-    } else {
-      const results = await search(q)
-      setDisplayedEntries(results)
-    }
-  }
+    setActiveDate(null)
+    setActiveFilter(null)
+    setActiveTag(null)
+  }, [])
 
-  const handleNew = () => {
-    setSelected({ id: 0, title: '', body: '', tags: [], created_at: '', updated_at: '' })
-    setIsNew(true)
-  }
+  const handleFilterType = useCallback((type: string | null) => {
+    setActiveFilter(type)
+    setActiveDate(null)
+    setActiveTag(null)
+    setSearchQuery('')
+  }, [])
 
-  const handleSelect = (entry: Entry) => {
-    setSelected(entry)
-    setIsNew(false)
-  }
+  const handleFilterDate = useCallback((date: string | null) => {
+    setActiveDate(date)
+    setActiveFilter(null)
+    setActiveTag(null)
+    setSearchQuery('')
+  }, [])
 
-  const handleSave = async (title: string, body: string, tags: string[]) => {
-    if (isNew || !selected || selected.id === 0) {
-      const created = await create(title, body, tags)
-      setSelected(created)
-      setIsNew(false)
-    } else {
-      await update(selected.id, title, body, tags)
-      setSelected({ ...selected, title, body, tags })
-    }
-  }
+  const handleFilterTag = useCallback((tag: string | null) => {
+    setActiveTag(tag)
+    setActiveDate(null)
+    setActiveFilter(null)
+    setSearchQuery('')
+  }, [])
 
-  const handleDelete = async (id: number) => {
+  const handleCreate = useCallback(
+    async (title: string, body: string, tags: string[], type: string, visibility: string) => {
+      await create(title, body, tags, type, visibility)
+    },
+    [create]
+  )
+
+  const handleSave = useCallback(
+    async (id: number, title: string, body: string, tags: string[], type: string, visibility: string) => {
+      await update(id, title, body, tags, type, visibility)
+    },
+    [update]
+  )
+
+  const handleDelete = useCallback(async (id: number) => {
     await remove(id)
-    setSelected(null)
-    setIsNew(false)
-  }
+  }, [remove])
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-zinc-950 items-center justify-center text-zinc-400">
+      <div className="flex h-screen bg-[#0c0c0e] items-center justify-center text-zinc-500 text-sm">
         Carregando...
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
-      <Sidebar
+    <div className="flex h-screen bg-[#0c0c0e] text-zinc-100 overflow-hidden">
+      {/* Narrow icon nav */}
+      <NavBar active={activeNav} onChange={setActiveNav} />
+
+      {/* Context panel */}
+      <ContextPanel
+        entries={entries}
+        dates={dates}
+        activeFilter={activeFilter}
+        onFilterType={handleFilterType}
+        onFilterDate={handleFilterDate}
+        onFilterTag={handleFilterTag}
+        activeTag={activeTag}
+        activeDate={activeDate}
+      />
+
+      {/* Main feed */}
+      <Feed
         entries={displayedEntries}
-        selectedId={selected?.id ?? null}
-        onSelect={handleSelect}
-        onNew={handleNew}
         searchQuery={searchQuery}
         onSearch={handleSearch}
+        onCreate={handleCreate}
+        onSave={handleSave}
+        onDelete={handleDelete}
+        activeFilter={activeFilter}
+        activeDate={activeDate}
+        activeTag={activeTag}
       />
-      {selected ? (
-        <Editor entry={selected} onSave={handleSave} onDelete={handleDelete} />
-      ) : (
-        <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 gap-3">
-          <span className="text-5xl">📓</span>
-          <p className="text-lg font-medium text-zinc-400">Work Journal</p>
-          <p className="text-sm">Selecione uma anotação ou clique em <strong>+ Novo</strong></p>
-        </div>
-      )}
     </div>
   )
 }
