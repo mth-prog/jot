@@ -127,15 +127,27 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
           </div>
 
           {entry.body && (
-            <div className="px-4 pb-3 cursor-pointer" onClick={() => setExpanded(e => !e)}>
-              {expanded ? (
-                <div data-color-mode="dark">
-                  <MDEditor.Markdown source={entry.body} style={{ background: 'transparent', fontSize: 13, color: '#a1a1aa' }} />
-                </div>
-              ) : (
-                <p className="text-zinc-500 text-xs line-clamp-2 leading-relaxed">
-                  {entry.body.replace(/[#*`>_~\[\]]/g, '').slice(0, 200)}
-                </p>
+            <div
+              className="px-4 pb-3 cursor-pointer"
+              onClick={() => setExpanded(e => !e)}
+            >
+              {/* Markdown sempre renderizado — só a altura varia */}
+              <div
+                data-color-mode="dark"
+                style={{
+                  maxHeight: expanded ? '9999px' : '7.5rem', // ~5 linhas colapsado
+                  overflow: 'hidden',
+                  transition: 'max-height 0.25s ease',
+                }}
+              >
+                <MDEditor.Markdown
+                  source={entry.body}
+                  style={{ background: 'transparent', fontSize: 13, color: '#a1a1aa', lineHeight: 1.6 }}
+                />
+              </div>
+              {/* Fade gradient quando colapsado e há conteúdo longo */}
+              {!expanded && entry.body.length > 200 && (
+                <div className="h-6 -mt-6 bg-gradient-to-t from-[#18181b] to-transparent pointer-events-none" />
               )}
             </div>
           )}
