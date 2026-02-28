@@ -1,6 +1,10 @@
-import Database from 'better-sqlite3'
+import { createRequire } from 'node:module'
 import { app } from 'electron'
 import path from 'node:path'
+
+const require = createRequire(import.meta.url)
+// Load native module at runtime (not bundled by Vite)
+const Database = require('better-sqlite3') as typeof import('better-sqlite3')
 
 const dbPath = path.join(app.getPath('userData'), 'work-journal.db')
 const db = new Database(dbPath)
