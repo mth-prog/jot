@@ -64,7 +64,7 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
   }
 
   return (
-    <article className="bg-[#18181b] border border-[#2a2a2e] rounded-xl mb-3 overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/30">
+    <article className={`bg-[#18181b] border border-[#2a2a2e] rounded-xl mb-3 transition-shadow hover:shadow-lg hover:shadow-black/30 ${editing ? '' : 'overflow-hidden'}`}>
       {editing ? (
         <div data-color-mode="dark">
           {/* Edit header */}
