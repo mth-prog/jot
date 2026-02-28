@@ -72,12 +72,11 @@ function registerIpcHandlers() {
   ipcMain.handle('entries:getAll', () => entryDb.getAll())
   ipcMain.handle('entries:getByDate', (_e, date: string) => entryDb.getByDate(date))
   ipcMain.handle('entries:getDates', () => entryDb.getDatesWithEntries())
-  ipcMain.handle('entries:getByType', (_e, type: string) => entryDb.getByType(type))
-  ipcMain.handle('entries:create', (_e, title: string, body: string, tags: string[], type?: string, visibility?: string) =>
-    entryDb.create(title, body, tags, type, visibility)
+  ipcMain.handle('entries:create', (_e, title: string, body: string, tags: string[], visibility?: string) =>
+    entryDb.create(title, body, tags, visibility)
   )
-  ipcMain.handle('entries:update', (_e, id: number, title: string, body: string, tags: string[], type?: string, visibility?: string) =>
-    entryDb.update(id, title, body, tags, type, visibility)
+  ipcMain.handle('entries:update', (_e, id: number, title: string, body: string, tags: string[], visibility?: string) =>
+    entryDb.update(id, title, body, tags, visibility)
   )
   ipcMain.handle('entries:delete', (_e, id: number) => entryDb.delete(id))
   ipcMain.handle('entries:search', (_e, query: string) => entryDb.search(query))

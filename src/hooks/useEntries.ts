@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import '../types'
-import type { Entry, DateCount, EntryType, EntryVisibility } from '../types'
+import type { Entry, DateCount, EntryVisibility } from '../types'
 
 function parseEntry(row: Entry & { tags: string | string[] }): Entry {
   return {
     ...row,
     tags: typeof row.tags === 'string' ? JSON.parse(row.tags) : row.tags,
-    type: (row.type ?? 'note') as EntryType,
     visibility: (row.visibility ?? 'private') as EntryVisibility,
   }
 }
@@ -29,8 +28,8 @@ export function useEntries() {
   useEffect(() => { refresh() }, [refresh])
 
   const create = useCallback(
-    async (title: string, body: string, tags: string[], type?: string, visibility?: string): Promise<Entry> => {
-      const entry = await window.journal.create(title, body, tags, type, visibility)
+    async (title: string, body: string, tags: string[], visibility?: string): Promise<Entry> => {
+      const entry = await window.journal.create(title, body, tags, visibility)
       await refresh()
       return parseEntry(entry as Entry & { tags: string | string[] })
     },
@@ -38,8 +37,8 @@ export function useEntries() {
   )
 
   const update = useCallback(
-    async (id: number, title: string, body: string, tags: string[], type?: string, visibility?: string) => {
-      await window.journal.update(id, title, body, tags, type, visibility)
+    async (id: number, title: string, body: string, tags: string[], visibility?: string) => {
+      await window.journal.update(id, title, body, tags, visibility)
       await refresh()
     },
     [refresh]
@@ -61,10 +60,5 @@ export function useEntries() {
     return rows.map(parseEntry)
   }, [])
 
-  const getByType = useCallback(async (type: string): Promise<Entry[]> => {
-    const rows = await window.journal.getByType(type)
-    return rows.map(parseEntry)
-  }, [])
-
-  return { entries, dates, loading, create, update, remove, search, getByDate, getByType, refresh }
+  return { entries, dates, loading, create, update, remove, search, getByDate, refresh }
 }

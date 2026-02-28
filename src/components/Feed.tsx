@@ -6,8 +6,8 @@ interface FeedProps {
   entries: Entry[]
   searchQuery: string
   onSearch: (q: string) => void
-  onCreate: (title: string, body: string, tags: string[], type: string, visibility: string) => Promise<void>
-  onSave: (id: number, title: string, body: string, tags: string[], type: string, visibility: string) => Promise<void>
+  onCreate: (title: string, body: string, tags: string[], visibility: string) => Promise<void>
+  onSave: (id: number, title: string, body: string, tags: string[], visibility: string) => Promise<void>
   onDelete: (id: number) => Promise<void>
   activeFilter: string | null
   activeDate: string | null

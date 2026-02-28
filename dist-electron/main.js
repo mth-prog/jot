@@ -13,7 +13,6 @@ db.exec(`
     title      TEXT NOT NULL,
     body       TEXT NOT NULL DEFAULT '',
     tags       TEXT NOT NULL DEFAULT '[]',
-    type       TEXT NOT NULL DEFAULT 'note',
     visibility TEXT NOT NULL DEFAULT 'private',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -39,7 +38,6 @@ db.exec(`
   END;
 `);
 const existingCols = db.prepare("PRAGMA table_info(entries)").all().map((c) => c.name);
-if (!existingCols.includes("type")) db.exec("ALTER TABLE entries ADD COLUMN type TEXT NOT NULL DEFAULT 'note'");
 if (!existingCols.includes("visibility")) db.exec("ALTER TABLE entries ADD COLUMN visibility TEXT NOT NULL DEFAULT 'private'");
 const entryDb = {
   getAll() {
@@ -58,21 +56,16 @@ const entryDb = {
       "SELECT DATE(created_at) as date, COUNT(*) as count FROM entries GROUP BY DATE(created_at)"
     ).all();
   },
-  getByType(type) {
-    return db.prepare(
-      "SELECT * FROM entries WHERE type = ? ORDER BY created_at DESC"
-    ).all(type);
-  },
-  create(title, body, tags, type = "note", visibility = "private") {
-    const result = db.prepare("INSERT INTO entries (title, body, tags, type, visibility) VALUES (?, ?, ?, ?, ?)").run(title, body, JSON.stringify(tags), type, visibility);
+  create(title, body, tags, visibility = "private") {
+    const result = db.prepare("INSERT INTO entries (title, body, tags, visibility) VALUES (?, ?, ?, ?)").run(title, body, JSON.stringify(tags), visibility);
     return this.getById(result.lastInsertRowid);
   },
-  update(id, title, body, tags, type, visibility) {
+  update(id, title, body, tags, visibility) {
     const current = this.getById(id);
     if (!current) return null;
     db.prepare(
-      "UPDATE entries SET title=?, body=?, tags=?, type=?, visibility=?, updated_at=CURRENT_TIMESTAMP WHERE id=?"
-    ).run(title, body, JSON.stringify(tags), type ?? current.type, visibility ?? current.visibility, id);
+      "UPDATE entries SET title=?, body=?, tags=?, visibility=?, updated_at=CURRENT_TIMESTAMP WHERE id=?"
+    ).run(title, body, JSON.stringify(tags), visibility ?? current.visibility, id);
     return this.getById(id) ?? null;
   },
   delete(id) {

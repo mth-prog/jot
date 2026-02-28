@@ -1,18 +1,11 @@
 import { useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
-import type { Entry, EntryType, EntryVisibility } from '../types'
+import type { Entry, EntryVisibility } from '../types'
 
 interface EntryCardProps {
   entry: Entry
-  onSave: (id: number, title: string, body: string, tags: string[], type: string, visibility: string) => Promise<void>
+  onSave: (id: number, title: string, body: string, tags: string[], visibility: string) => Promise<void>
   onDelete: (id: number) => Promise<void>
-}
-
-const TYPE_META: Record<EntryType, { icon: string; color: string }> = {
-  note: { icon: '📝', color: 'text-zinc-400' },
-  task: { icon: '✅', color: 'text-green-400' },
-  code: { icon: '💻', color: 'text-blue-400' },
-  link: { icon: '🔗', color: 'text-yellow-400' },
 }
 
 function timeAgo(iso: string) {
@@ -33,17 +26,14 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
   const [title, setTitle] = useState(entry.title)
   const [body, setBody] = useState(entry.body)
   const [tags, setTags] = useState(entry.tags)
-  const [type, setType] = useState<EntryType>(entry.type)
   const [visibility, setVisibility] = useState<EntryVisibility>(entry.visibility)
   const [tagInput, setTagInput] = useState('')
   const [saving, setSaving] = useState(false)
 
-  const typeMeta = TYPE_META[type] ?? TYPE_META.note
-
   const handleSave = async () => {
     setSaving(true)
     try {
-      await onSave(entry.id, title, body, tags, type, visibility)
+      await onSave(entry.id, title, body, tags, visibility)
       setEditing(false)
     } finally {
       setSaving(false)
@@ -51,11 +41,7 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
   }
 
   const handleCancel = () => {
-    setTitle(entry.title)
-    setBody(entry.body)
-    setTags(entry.tags)
-    setType(entry.type)
-    setVisibility(entry.visibility)
+    setTitle(entry.title); setBody(entry.body); setTags(entry.tags); setVisibility(entry.visibility)
     setEditing(false)
   }
 
@@ -68,22 +54,9 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
   return (
     <article className="bg-[#18181b] border border-[#2a2a2e] rounded-xl mb-3 overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/30">
       {editing ? (
-        /* ── Edit Mode ── */
         <div data-color-mode="dark">
           {/* Edit header */}
           <div className="flex items-center gap-2 px-4 pt-4 pb-2">
-            {/* Type selector */}
-            <select
-              value={type}
-              onChange={e => setType(e.target.value as EntryType)}
-              className="bg-[#27272a] text-zinc-300 text-xs rounded px-2 py-1 outline-none border border-[#3f3f46]"
-            >
-              <option value="note">📝 Nota</option>
-              <option value="task">✅ Tarefa</option>
-              <option value="code">💻 Código</option>
-              <option value="link">🔗 Link</option>
-            </select>
-
             <input
               type="text"
               value={title}
@@ -91,8 +64,6 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
               placeholder="Título..."
               className="flex-1 bg-transparent text-white font-semibold text-sm outline-none placeholder-zinc-600"
             />
-
-            {/* Visibility toggle */}
             <button
               onClick={() => setVisibility(v => v === 'private' ? 'shared' : 'private')}
               title={visibility === 'private' ? 'Privado' : 'Compartilhado'}
@@ -111,34 +82,21 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
               </span>
             ))}
             <input
-              type="text"
-              placeholder="+ tag"
-              value={tagInput}
+              type="text" placeholder="+ tag" value={tagInput}
               onChange={e => setTagInput(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTag(tagInput) } }}
               className="bg-transparent text-zinc-400 text-[11px] outline-none placeholder-zinc-600 w-16"
             />
           </div>
 
-          {/* Editor */}
           <div className="border-t border-[#2a2a2e]">
-            <MDEditor
-              value={body}
-              onChange={val => setBody(val ?? '')}
-              height={300}
-              preview="live"
-              style={{ borderRadius: 0 }}
-            />
+            <MDEditor value={body} onChange={val => setBody(val ?? '')} height={300} preview="live" style={{ borderRadius: 0 }} />
           </div>
 
-          {/* Actions */}
           <div className="flex justify-end gap-2 px-4 py-3 border-t border-[#2a2a2e] bg-[#111113]">
-            <button onClick={handleCancel} className="text-zinc-500 hover:text-zinc-300 text-sm px-3 py-1 rounded transition-colors">
-              Cancelar
-            </button>
+            <button onClick={handleCancel} className="text-zinc-500 hover:text-zinc-300 text-sm px-3 py-1 rounded transition-colors">Cancelar</button>
             <button
-              onClick={handleSave}
-              disabled={saving || !title.trim()}
+              onClick={handleSave} disabled={saving || !title.trim()}
               className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm px-4 py-1.5 rounded-lg transition-colors"
             >
               {saving ? 'Salvando...' : '💾 Salvar'}
@@ -146,23 +104,18 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
           </div>
         </div>
       ) : (
-        /* ── View Mode ── */
         <div>
-          {/* Card header */}
           <div className="flex items-start gap-3 px-4 pt-4 pb-3">
-            <span className={`text-base mt-0.5 ${typeMeta.color}`}>{typeMeta.icon}</span>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <h3 className="text-zinc-100 font-semibold text-sm truncate flex-1">
                   {entry.title || <span className="text-zinc-600 italic">Sem título</span>}
                 </h3>
-                <span title={visibility === 'private' ? 'Privado' : 'Compartilhado'} className="text-xs text-zinc-600">
-                  {visibility === 'private' ? '🔒' : '🌐'}
+                <span title={entry.visibility === 'private' ? 'Privado' : 'Compartilhado'} className="text-xs text-zinc-600">
+                  {entry.visibility === 'private' ? '🔒' : '🌐'}
                 </span>
                 <span className="text-[11px] text-zinc-600 whitespace-nowrap">{timeAgo(entry.updated_at)}</span>
               </div>
-
-              {/* Tags */}
               {entry.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-1">
                   {entry.tags.map(t => (
@@ -173,12 +126,8 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
             </div>
           </div>
 
-          {/* Body preview */}
           {entry.body && (
-            <div
-              className="px-4 pb-3 cursor-pointer"
-              onClick={() => setExpanded(e => !e)}
-            >
+            <div className="px-4 pb-3 cursor-pointer" onClick={() => setExpanded(e => !e)}>
               {expanded ? (
                 <div data-color-mode="dark">
                   <MDEditor.Markdown source={entry.body} style={{ background: 'transparent', fontSize: 13, color: '#a1a1aa' }} />
@@ -191,27 +140,13 @@ export function EntryCard({ entry, onSave, onDelete }: EntryCardProps) {
             </div>
           )}
 
-          {/* Footer actions */}
           <div className="flex items-center justify-between px-4 py-2 border-t border-[#27272a]">
-            <button
-              onClick={() => setExpanded(e => !e)}
-              className="text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors"
-            >
+            <button onClick={() => setExpanded(e => !e)} className="text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors">
               {expanded ? '▲ Recolher' : '▼ Expandir'}
             </button>
             <div className="flex gap-3">
-              <button
-                onClick={() => setEditing(true)}
-                className="text-[11px] text-zinc-500 hover:text-indigo-400 transition-colors"
-              >
-                ✏️ Editar
-              </button>
-              <button
-                onClick={() => onDelete(entry.id)}
-                className="text-[11px] text-zinc-600 hover:text-red-400 transition-colors"
-              >
-                🗑️ Excluir
-              </button>
+              <button onClick={() => setEditing(true)} className="text-[11px] text-zinc-500 hover:text-indigo-400 transition-colors">✏️ Editar</button>
+              <button onClick={() => onDelete(entry.id)} className="text-[11px] text-zinc-600 hover:text-red-400 transition-colors">🗑️ Excluir</button>
             </div>
           </div>
         </div>
