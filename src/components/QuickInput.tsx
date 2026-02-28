@@ -1,6 +1,18 @@
 import { useState, useRef } from 'react'
 import type { EntryVisibility } from '../types'
 
+const LockIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+    <path d="M11.5 8h-7A1.5 1.5 0 0 0 3 9.5v4A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-4A1.5 1.5 0 0 0 11.5 8zM8 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM5.5 8V5.5a2.5 2.5 0 0 1 5 0V8h-5z"/>
+  </svg>
+)
+
+const GlobeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-1 14.9A6.5 6.5 0 0 1 2 8.5H1.5a6.5 6.5 0 0 1 5.5 6.4zM8 15a6.97 6.97 0 0 1-1-.07V9H5.5A6.5 6.5 0 0 1 1.5 8h14a6.5 6.5 0 0 1-4 6.5V9H9v5.93A6.97 6.97 0 0 1 8 15zM2 7.5A6.5 6.5 0 0 1 8 1a6.5 6.5 0 0 1 6 4H2.5A6.5 6.5 0 0 1 2 7.5zM8 1c.34 0 .67.03 1 .07V6h1.5A6.5 6.5 0 0 1 14.5 7H1.5A6.5 6.5 0 0 1 4 2.5 6.97 6.97 0 0 1 8 1z"/>
+  </svg>
+)
+
 interface QuickInputProps {
   onCreate: (title: string, body: string, tags: string[], visibility: string) => Promise<void>
 }
@@ -84,9 +96,9 @@ export function QuickInput({ onCreate }: QuickInputProps) {
               <button
                 onClick={() => setVisibility(v => v === 'private' ? 'shared' : 'private')}
                 title={visibility === 'private' ? 'Privado' : 'Compartilhado'}
-                className="text-zinc-500 hover:text-zinc-300 text-base transition-colors"
+                className="text-zinc-500 hover:text-zinc-300 transition-colors"
               >
-                {visibility === 'private' ? '🔒' : '🌐'}
+                {visibility === 'private' ? <LockIcon /> : <GlobeIcon />}
               </button>
               <button onClick={reset} className="text-zinc-600 hover:text-zinc-400 text-sm px-2 py-1 transition-colors">
                 Cancelar

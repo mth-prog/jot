@@ -122,14 +122,13 @@ function registerIpcHandlers() {
   ipcMain.handle("entries:getAll", () => entryDb.getAll());
   ipcMain.handle("entries:getByDate", (_e, date) => entryDb.getByDate(date));
   ipcMain.handle("entries:getDates", () => entryDb.getDatesWithEntries());
-  ipcMain.handle("entries:getByType", (_e, type) => entryDb.getByType(type));
   ipcMain.handle(
     "entries:create",
-    (_e, title, body, tags, type, visibility) => entryDb.create(title, body, tags, type, visibility)
+    (_e, title, body, tags, visibility) => entryDb.create(title, body, tags, visibility)
   );
   ipcMain.handle(
     "entries:update",
-    (_e, id, title, body, tags, type, visibility) => entryDb.update(id, title, body, tags, type, visibility)
+    (_e, id, title, body, tags, visibility) => entryDb.update(id, title, body, tags, visibility)
   );
   ipcMain.handle("entries:delete", (_e, id) => entryDb.delete(id));
   ipcMain.handle("entries:search", (_e, query) => entryDb.search(query));
