@@ -69,14 +69,18 @@ function App() {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-[#0c0c0e] items-center justify-center text-zinc-500 text-sm">
-        Carregando...
+      <div
+        className="flex h-screen items-center justify-center flex-col gap-3"
+        style={{ background: 'var(--c-base)' }}
+      >
+        <div className="font-display" style={{ color: 'var(--c-accent)', fontSize: 32, fontStyle: 'italic', fontWeight: 700 }}>J</div>
+        <p className="font-mono-j" style={{ color: 'var(--c-text-3)', fontSize: 11 }}>a carregar…</p>
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen bg-[#0c0c0e] text-zinc-100 overflow-hidden">
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--c-base)', color: 'var(--c-text)' }}>
       <NavBar active={activeNav} onChange={setActiveNav} />
 
       <ContextPanel

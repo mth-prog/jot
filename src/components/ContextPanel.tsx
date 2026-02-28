@@ -54,33 +54,57 @@ export function ContextPanel({
   }
   const sortedTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1])
 
-  const monthName = new Date(calYear, calMonth).toLocaleString('pt-BR', { month: 'long', year: 'numeric' })
+  const monthName = new Date(calYear, calMonth).toLocaleString('pt-BR', { month: 'long' })
+  const yearStr = String(calYear)
 
   return (
-    <aside className="w-64 shrink-0 bg-[#18181b] border-r border-[#2a2a2e] flex flex-col h-screen overflow-y-auto">
-
-      {/* Calendário */}
-      <div className="p-4 border-b border-[#2a2a2e]">
-        <div className="flex items-center justify-between mb-3">
+    <aside
+      className="shrink-0 flex flex-col h-screen overflow-y-auto"
+      style={{ width: 240, background: 'var(--c-surface)', borderRight: '1px solid var(--c-border)' }}
+    >
+      {/* ── Calendar ── */}
+      <div className="p-4" style={{ borderBottom: '1px solid var(--c-border)' }}>
+        {/* Month header */}
+        <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y - 1) } else setCalMonth(m => m - 1) }}
-            className="text-zinc-500 hover:text-zinc-300 text-sm px-1"
+            className="nav-btn flex items-center justify-center w-6 h-6 rounded"
+            style={{ color: 'var(--c-text-3)', fontSize: 16 }}
           >‹</button>
-          <span className="text-zinc-300 text-xs font-medium capitalize">{monthName}</span>
+
+          <div className="text-center">
+            <div
+              className="font-mono-j capitalize"
+              style={{ color: 'var(--c-text)', fontSize: 13, fontWeight: 600, letterSpacing: '0.01em' }}
+            >
+              {monthName}
+            </div>
+            <div style={{ color: 'var(--c-text-3)', fontSize: 10, marginTop: 1 }}>{yearStr}</div>
+          </div>
+
           <button
             onClick={() => { if (calMonth === 11) { setCalMonth(0); setCalYear(y => y + 1) } else setCalMonth(m => m + 1) }}
-            className="text-zinc-500 hover:text-zinc-300 text-sm px-1"
+            className="nav-btn flex items-center justify-center w-6 h-6 rounded"
+            style={{ color: 'var(--c-text-3)', fontSize: 16 }}
           >›</button>
         </div>
 
+        {/* Weekday labels */}
         <div className="grid grid-cols-7 mb-1">
           {WEEKDAYS.map((d, i) => (
-            <div key={i} className="text-center text-[10px] text-zinc-600 font-medium py-0.5">{d}</div>
+            <div
+              key={i}
+              className="text-center py-0.5 font-mono-j"
+              style={{ fontSize: 9, color: 'var(--c-text-3)', fontWeight: 500 }}
+            >
+              {d}
+            </div>
           ))}
         </div>
 
+        {/* Day grid */}
         <div className="grid grid-cols-7 gap-y-0.5">
-          {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
+          {Array.from({ length: firstDay }).map((_, i) => <div key={`e-${i}`} />)}
           {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
             const dateStr = toDateStr(day)
             const hasEntries = dateSet.has(dateStr)
@@ -91,14 +115,36 @@ export function ContextPanel({
               <button
                 key={day}
                 onClick={() => onFilterDate(isSelected ? null : dateStr)}
-                className={`relative text-[11px] w-full aspect-square flex items-center justify-center rounded transition-colors
-                  ${isSelected ? 'bg-indigo-600 text-white' :
-                    isTodayDay ? 'bg-indigo-600/20 text-indigo-400 font-bold' :
-                    'text-zinc-400 hover:bg-[#27272a]'}`}
+                className="relative w-full aspect-square flex items-center justify-center rounded font-mono-j"
+                style={{
+                  fontSize: 10,
+                  fontWeight: isTodayDay ? 700 : 400,
+                  color: isSelected
+                    ? '#090909'
+                    : isTodayDay
+                    ? 'var(--c-accent)'
+                    : hasEntries
+                    ? 'var(--c-text-2)'
+                    : 'var(--c-text-3)',
+                  background: isSelected
+                    ? 'var(--c-accent)'
+                    : isTodayDay
+                    ? 'var(--c-accent-dim)'
+                    : 'transparent',
+                  transition: 'background 0.12s, color 0.12s',
+                }}
               >
                 {day}
                 {hasEntries && !isSelected && (
-                  <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-indigo-500" />
+                  <span
+                    style={{
+                      position: 'absolute', bottom: 2, left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: 3, height: 3, borderRadius: '50%',
+                      background: 'var(--c-accent)',
+                      opacity: isTodayDay ? 0.4 : 0.6,
+                    }}
+                  />
                 )}
               </button>
             )
@@ -106,35 +152,56 @@ export function ContextPanel({
         </div>
       </div>
 
-      {/* Nuvem de Tags */}
+      {/* ── Tags ── */}
       <div className="p-4 flex-1">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-[10px] text-zinc-600 uppercase tracking-wider font-semibold">Tags</p>
-          <span className="text-[10px] text-zinc-700">{sortedTags.length}</span>
+          <span
+            className="font-mono-j uppercase tracking-widest"
+            style={{ fontSize: 9, color: 'var(--c-text-3)', fontWeight: 500 }}
+          >
+            Tags
+          </span>
+          {sortedTags.length > 0 && (
+            <span className="font-mono-j" style={{ fontSize: 9, color: 'var(--c-text-3)' }}>
+              {sortedTags.length}
+            </span>
+          )}
         </div>
+
         {sortedTags.length === 0 ? (
-          <p className="text-zinc-600 text-xs">Nenhuma tag ainda.<br/>Adicione tags às anotações!</p>
+          <p style={{ color: 'var(--c-text-3)', fontSize: 12, lineHeight: 1.6 }}>
+            Nenhuma tag ainda.
+          </p>
         ) : (
           <div className="flex flex-wrap gap-1.5">
             {sortedTags.map(([tag, count]) => (
               <button
                 key={tag}
                 onClick={() => onFilterTag(activeTag === tag ? null : tag)}
-                className={`text-[11px] px-2 py-0.5 rounded-full transition-colors
-                  ${activeTag === tag
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-[#27272a] text-zinc-400 hover:bg-[#3f3f46] hover:text-zinc-200'}`}
+                className="font-mono-j transition-all"
+                style={{
+                  fontSize: 10,
+                  padding: '2px 8px',
+                  borderRadius: 9999,
+                  border: `1px solid ${activeTag === tag ? 'var(--c-accent)' : 'var(--c-border-hi)'}`,
+                  background: activeTag === tag ? 'var(--c-accent-dim)' : 'transparent',
+                  color: activeTag === tag ? 'var(--c-accent)' : 'var(--c-text-3)',
+                  cursor: 'pointer',
+                }}
               >
-                #{tag} <span className="opacity-50">{count}</span>
+                #{tag} <span style={{ opacity: 0.5 }}>{count}</span>
               </button>
             ))}
           </div>
         )}
       </div>
 
-      {/* Footer: total */}
-      <div className="p-3 border-t border-[#2a2a2e]">
-        <p className="text-[10px] text-zinc-700 text-center">{entries.length} anotações</p>
+      {/* ── Footer ── */}
+      <div
+        className="p-3 text-center font-mono-j"
+        style={{ borderTop: '1px solid var(--c-border)', color: 'var(--c-text-3)', fontSize: 10 }}
+      >
+        {entries.length} {entries.length === 1 ? 'anotação' : 'anotações'}
       </div>
     </aside>
   )

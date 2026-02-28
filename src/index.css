@@ -1,7 +1,33 @@
 @import "tailwindcss";
 
+/* ─── Design tokens ─── */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Backgrounds — neutral black, no hue tint */
+  --c-base:     #090909;
+  --c-surface:  #111111;
+  --c-elevated: #181818;
+  --c-muted:    #131313;
+
+  /* Borders */
+  --c-border:    #222222;
+  --c-border-hi: #2e2e2e;
+
+  /* Text */
+  --c-text:        #e8e8e8;
+  --c-text-2:      #888888;
+  --c-text-3:      #444444;
+
+  /* Accent — clean blue */
+  --c-accent:     #4a8fe8;
+  --c-accent-h:   #5fa0f2;
+  --c-accent-dim: rgba(74, 143, 232, 0.10);
+  --c-accent-low: rgba(74, 143, 232, 0.18);
+
+  /* Danger */
+  --c-danger:     #c85050;
+  --c-danger-dim: rgba(200, 80, 80, 0.12);
+
+  font-family: 'Lora', Georgia, serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -12,73 +38,110 @@
 
 body {
   margin: 0;
-  background-color: #0c0c0e;
-  color: #f4f4f5;
+  background-color: var(--c-base);
+  color: var(--c-text);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #52525b; }
+/* Subtle grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9998;
+}
 
-/* MDEditor dark theme */
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-border-hi); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #505050; }
+
+/* ─── Font helpers ─── */
+.font-display { font-family: 'Playfair Display', Georgia, serif; }
+.font-mono-j  { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+
+/* ─── Nav button hover ─── */
+.nav-btn { transition: color 0.15s, background 0.15s; }
+.nav-btn:hover { color: var(--c-text-2) !important; background: var(--c-elevated) !important; }
+
+/* ─── Entry card animation ─── */
+@keyframes entryIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.entry-in { animation: entryIn 0.22s ease both; }
+
+/* ─── MDEditor dark theme ─── */
 .w-md-editor {
-  background-color: #0c0c0e !important;
-  color: #e4e4e7 !important;
+  background-color: var(--c-base) !important;
+  color: var(--c-text) !important;
   border: none !important;
   box-shadow: none !important;
 }
 .w-md-editor-toolbar {
-  background-color: #18181b !important;
-  border-bottom: 1px solid #27272a !important;
+  background-color: var(--c-surface) !important;
+  border-bottom: 1px solid var(--c-border) !important;
 }
-.w-md-editor-content { background-color: #0c0c0e !important; }
+.w-md-editor-content { background-color: var(--c-base) !important; }
 .w-md-editor-text-pre > code,
-.w-md-editor-text-input { font-size: 13px !important; }
+.w-md-editor-text-input {
+  font-size: 14px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
 
-/* Markdown preview — usado nos cards e no editor */
+/* ─── Markdown preview ─── */
 .wmde-markdown {
   background-color: transparent !important;
-  color: #a1a1aa !important;
+  color: var(--c-text-2) !important;
   font-size: 13px !important;
-  font-family: inherit !important;
+  font-family: 'JetBrains Mono', 'Courier New', monospace !important;
+  line-height: 1.7 !important;
 }
 .wmde-markdown h1,
 .wmde-markdown h2,
 .wmde-markdown h3,
 .wmde-markdown h4,
 .wmde-markdown h5,
-.wmde-markdown h6 { color: #e4e4e7 !important; border-bottom-color: #27272a !important; }
-.wmde-markdown p  { color: #a1a1aa !important; }
-.wmde-markdown strong { color: #d4d4d8 !important; }
-.wmde-markdown em    { color: #a1a1aa !important; }
-.wmde-markdown a     { color: #818cf8 !important; }
+.wmde-markdown h6 {
+  color: var(--c-text) !important;
+  border-bottom-color: var(--c-border) !important;
+  font-family: 'JetBrains Mono', 'Courier New', monospace !important;
+}
+.wmde-markdown p      { color: var(--c-text-2) !important; }
+.wmde-markdown strong { color: var(--c-text) !important; }
+.wmde-markdown em     { color: var(--c-text-2) !important; font-style: italic; }
+.wmde-markdown a      { color: var(--c-accent) !important; }
 .wmde-markdown blockquote {
-  color: #71717a !important;
-  border-left-color: #3f3f46 !important;
+  color: var(--c-text-3) !important;
+  border-left-color: var(--c-border-hi) !important;
   background: transparent !important;
+  font-style: italic;
 }
 .wmde-markdown code {
-  background-color: #27272a !important;
-  color: #c4b5fd !important;
+  background-color: var(--c-muted) !important;
+  color: var(--c-accent) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
 }
 .wmde-markdown pre,
 .wmde-markdown pre > code {
-  background-color: #1e1e22 !important;
-  color: #d4d4d8 !important;
+  background-color: var(--c-surface) !important;
+  color: var(--c-text) !important;
 }
-.wmde-markdown hr { border-color: #27272a !important; }
+.wmde-markdown hr { border-color: var(--c-border) !important; }
 .wmde-markdown table thead tr {
-  background-color: #27272a !important;
-  border-top-color: #3f3f46 !important;
+  background-color: var(--c-surface) !important;
+  border-top-color: var(--c-border-hi) !important;
 }
-.wmde-markdown table tr { background-color: transparent !important; border-color: #27272a !important; }
-.wmde-markdown table tr:nth-child(2n) { background-color: #18181b !important; }
+.wmde-markdown table tr { background-color: transparent !important; border-color: var(--c-border) !important; }
+.wmde-markdown table tr:nth-child(2n) { background-color: var(--c-surface) !important; }
 .wmde-markdown ul li::marker,
-.wmde-markdown ol li::marker { color: #52525b !important; }
+.wmde-markdown ol li::marker { color: var(--c-text-3) !important; }
 
-/* line-clamp utility */
+/* ─── line-clamp ─── */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
