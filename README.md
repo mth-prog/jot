@@ -12,9 +12,17 @@ Um app desktop para anotações e log de trabalho, feito para profissionais de t
 [![SQLite](https://img.shields.io/badge/SQLite-FTS5-003b57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
-## Visão Geral
+## 🐿️ Sua memória falha. O Esquilo não.
 
-Work Journal é um diário de trabalho offline-first para devs e pessoas de tech que precisam registrar o dia a dia — tarefas, bugs, deploys, reuniões, ideias. Tudo salvo localmente em um arquivo `.db`, sem dependência de internet.
+Você pisca e já é hora da reunião diária. Você sabe que trabalhou muito ontem, resolveu bugs complexos e teve ideias ótimas, mas na hora que o Scrum Master pergunta "o que você fez?", dá aquele branco total. Suas anotações estão perdidas no meio do bloco de notas, no Slack ou, pior, só na sua cabeça.
+
+Esquilos são ágeis e espertos. Eles não pensam muito: acharam algo valioso, guardam em um lugar seguro e de fácil acesso para usar depois. 
+
+O **Jot** é exatamente isso para o seu fluxo de trabalho. É um diário de trabalho (*work journal*) "fricção zero" projetado para você capturar o que importa antes que a ideia evapore. Seus registros ficam 100% locais — sem nuvem, sem assinatura, sem rastreamento.
+
+Resolveu uma task? *Jot.*
+Teve uma ideia de arquitetura? *Jot.*
+Precisa salvar aquele snippet de código? *Jot.*
 
 ## Funcionalidades
 
