@@ -2,9 +2,7 @@
   <img src="logo.png" alt="Jot" width="96" />
 </p>
 
-# Work Journal
-
-Um app desktop para anotações e log de trabalho, feito para profissionais de tecnologia. Seus registros ficam 100% locais — sem nuvem, sem assinatura, sem rastreamento.
+# Jot 🐿️
 
 [![Electron](https://img.shields.io/badge/Electron-30-47848f?style=flat-square&logo=electron&logoColor=white)](https://www.electronjs.org/)
 [![React](https://img.shields.io/badge/React-18-61dafb?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
