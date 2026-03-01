@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="image.png" alt="Work Journal" width="96" />
+  <img src="logo.png" alt="Jot" width="96" />
 </p>
 
 # Work Journal
