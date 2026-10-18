@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Jot — símbolo, corte pequeno</title>
+  <circle cx="182" cy="46" r="27" fill="#4A8FE8"/>
+  <path d="M161 100 H203 V152 A78 78 0 0 1 47 152 H89 A36 36 0 0 0 161 152 Z" fill="#0F0F0F"/>
+</svg>

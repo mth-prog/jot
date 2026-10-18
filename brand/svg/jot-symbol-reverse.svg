@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Jot — símbolo invertido (fundo escuro)</title>
+  <circle cx="180" cy="48" r="25.5" fill="#4A8FE8"/>
+  <path d="M159 98 H201 V155 A75 75 0 0 1 51 155 H93 A33 33 0 0 0 159 155 Z" fill="#F5F5F3"/>
+</svg>

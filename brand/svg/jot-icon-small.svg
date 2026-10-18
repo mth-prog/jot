@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+<title>Jot — ícone, corte pequeno (16–32 px)</title>
+<rect width="256" height="256" rx="56" fill="#0F0F0F"/>
+<path fill="#F5F5F3" d="M150 105.5 H186 V148.5 A58 58 0 0 1 70 148.5 H106 A22 22 0 0 0 150 148.5 Z"/>
+<circle cx="168" cy="67.5" r="18" fill="#4A8FE8"/></svg>

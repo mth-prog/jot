@@ -1,8 +1,11 @@
 <p align="center">
-  <img src="logo.png" alt="Jot" width="96" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/png/jot-lockup-horizontal-reverse-1200.png" />
+    <img src="brand/png/jot-lockup-horizontal-1200.png" alt="Jot" width="240" />
+  </picture>
 </p>
 
-# Jot 🐿️
+# Jot
 
 [![Electron](https://img.shields.io/badge/Electron-30-47848f?style=flat-square&logo=electron&logoColor=white)](https://www.electronjs.org/)
 [![React](https://img.shields.io/badge/React-18-61dafb?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
@@ -10,11 +13,11 @@
 [![SQLite](https://img.shields.io/badge/SQLite-FTS5-003b57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
-## 🐿️ Sua memória falha. O Esquilo não.
+## Sua memória falha. O Jot não.
 
 Você pisca e já é hora da reunião diária. Você sabe que trabalhou muito ontem, resolveu bugs complexos e teve ideias ótimas, mas na hora que o Scrum Master pergunta "o que você fez?", dá aquele branco total. Suas anotações estão perdidas no meio do bloco de notas, no Slack ou, pior, só na sua cabeça.
 
-Esquilos são ágeis e espertos. Eles não pensam muito: acharam algo valioso, guardam em um lugar seguro e de fácil acesso para usar depois. 
+*Jot* vem de *iota*, a menor letra do alfabeto grego: a menor marca que ainda significa alguma coisa. É o instinto de achar algo valioso e guardar num lugar seguro e de fácil acesso, antes que evapore.
 
 O **Jot** é exatamente isso para o seu fluxo de trabalho. É um diário de trabalho (*work journal*) "fricção zero" projetado para você capturar o que importa antes que a ideia evapore. Seus registros ficam 100% locais — sem nuvem, sem assinatura, sem rastreamento.
 
@@ -81,9 +84,14 @@ electron/
 | [Tailwind CSS v4](https://tailwindcss.com/) | Estilização |
 | [Vite](https://vitejs.dev/) | Build e dev server |
 
+## Marca
+
+A identidade visual (logo, ícone, cores) está em [`brand/`](brand/) — SVGs, PNGs e o
+[guia de marca](brand/GUIA-DE-MARCA.md).
+
 ## Licença
 
-Work Journal é distribuído sob a [licença MIT](LICENSE).
+Jot é distribuído sob a [licença MIT](LICENSE).
 
 ---
 
